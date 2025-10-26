@@ -1,0 +1,31 @@
+# R / RStudio
+.Rhistory
+.RData
+.Ruserdata
+.Rprofile
+.Renviron
+.Rproj.user
+*.Rproj
+
+# renv (reproducibilidad)
+renv/library/
+renv/staging/
+
+# Otros gestores (si aparecieran)
+packrat/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+
+# Paquetes locales
+renv/library/
+
+# Datos grandes
+data/*.xlsx
+
+# Carpetas locales que no quiero subir
+01-Artículo/
+ANOVAlab v0/
+ANOVAlab v1/

@@ -1,0 +1,19 @@
+---
+title: "Visualización de la variabilidad ANOVA"
+author: "E. Vázquez"
+date: "2025-10-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# ANOVAlab
+
+**ANOVAlab** es una aplicación interactiva desarrollada en R/Shiny para
+explorar visualmente el Análisis de la Varianza (ANOVA).
+
+## 🚀 Cómo ejecutar
+```r
+shiny::runApp("app")

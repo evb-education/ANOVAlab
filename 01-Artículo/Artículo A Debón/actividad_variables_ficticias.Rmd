@@ -1,0 +1,131 @@
+---
+title: "Introducción a las variables ficticias con IA generativa"
+author: "Ana Debón"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+# Objetivo
+
+En esta actividad aprenderás a introducir variables ficticias (*dummy variables*) en modelos de regresión lineal múltiple en **R**, utilizando la base de datos `Salaries` del paquete `carData`.  
+El objetivo es comprender cómo incorporar variables cualitativas en un modelo y cómo cambia la interpretación del resultado al incluir la variable `sex` de forma **aditiva** (`+ sex`) o **multiplicativa** (`* sex`) que en R supone añadir interacción.
+
+Además, se sugiere utilizar **ChatGPT** como apoyo durante el proceso para:
+- Consultar la interpretación de los coeficientes.
+- Pedir explicaciones de código.
+- Comparar tus resultados con las respuestas generadas por la IA.
+
+---
+
+# Carga de librerias, datos y exploración inicial
+
+```{r setup, message=FALSE, warning=FALSE}
+# Cargar librerías necesarias
+library(carData)
+library(ggplot2)
+library(car)
+library(lmtest)
+summary(Salaries)
+```
+
+¿Que significa cada variable y de que tipo son?
+puedes consultarle al ChatGPT.
+
+# Visualización inicial
+
+```{r}
+ggplot(Salaries, aes(x = yrs.since.phd, y = salary, color = sex)) +
+geom_point(size = 2) +
+geom_smooth(method = "lm", se = FALSE) +
+labs(title = "Salario vs. años desde el doctorado según sexo",
+x = "Años desde el doctorado", y = "Salario (USD)") +
+theme_minimal()
+```
+
+Observa las diferencias visuales en la pendiente y posición entre hombres y mujeres.
+¿Coinciden con lo que esperarías?
+
+Consulta a ChatGPT:
+
+“¿Qué representa una variable ficticia en este contexto y cómo la interpreta R?”
+
+# Modelos aditivo
+```{r}
+model_add <- lm(salary ~ yrs.since.phd + sex, data = Salaries)
+summary(model_add)
+```
+
+**Interpretación esperada:**
+
+* El coeficiente de yrs.since.phd mide el incremento promedio en el salario por cada año desde el doctorado.
+
+* El coeficiente de sexMale muestra la diferencia promedio en el salario entre hombres y mujeres, manteniendo constante el resto de variables.
+
+* El intercepto corresponde al grupo de referencia (Female).
+
+Puedes preguntar a ChatGPT:
+
+“¿Cómo se interpreta el coeficiente de sexMale en un modelo lineal de R?”
+
+# Modelo con interacción
+
+```{r}
+model_int <- lm(salary ~ yrs.since.phd * sex, data = Salaries)
+summary(model_int)
+
+```
+
+**Explicación:**
+
+* El término * incluye tanto el efecto principal de sex como su interacción con yrs.since.phd.
+
+* Esto permite que la pendiente de la relación entre salario y años desde el doctorado sea diferente según el sexo.
+
+* La ecuación estimada puede expresarse como:
+
+Consulta a ChatGPT:
+
+“¿Qué significa la interacción yrs.since.phd:sexMale en este modelo? ¿Cómo cambia la interpretación del efecto del sexo respecto al modelo anterior?”
+
+# Comparación de modelos
+```{r}
+anova(model_add, model_int)
+```
+
+**Explicación:**
+
+* Si la interacción es significativa, indica que la relación entre salario y años desde el doctorado difiere entre hombres y mujeres.
+
+* Si no lo es, el modelo aditivo puede considerarse suficiente.
+
+# Validación de supuestos
+
+```{r}
+par(mfrow = c(1,2))
+qqPlot(residuals(model_add), main = "Normalidad de residuos (modelo aditivo)")
+plot(fitted(model_add), residuals(model_add),
+col = Salaries$sex, pch = 19,
+xlab = "Valores ajustados", ylab = "Residuos",
+main = "Homocedasticidad por sexo")
+abline(h = 0, col = "red")
+
+bptest(model_add)
+
+```
+¿Cumple el modelo los supuestos básicos?
+
+Pide a ChatGPT que te explique el resultado del test de Breusch-Pagan y los gráficos obtenidos.
+
+# Reflexión final
+Completa las siguientes preguntas:
+
+1. ¿Qué diferencia conceptual existe entre incluir + sex y * sex en el modelo?
+
+2. ¿Qué grupo sirve de referencia en la codificación de sex?
+
+3. ¿Qué ventajas y limitaciones observas al usar ChatGPT como apoyo en esta actividad?
+
