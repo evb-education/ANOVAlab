@@ -1,0 +1,131 @@
+TY  - JOUR
+TI  - Understanding one-way ANOVA using conceptual figures.
+AU  - Tae Kyun Kim
+AU  - Tae Kyun Kim
+DO  - 10.4097/kjae.2017.70.1.22
+PY  - 2017
+AB  - Analysis of variance (ANOVA) is one of the most frequently used statistical methods in medical research. The need for ANOVA arises from the error of alpha level inflation, which increases Type 1 error probability (false positive) and is caused by multiple comparisons. ANOVA uses the statistic F, which is the ratio of between and within group variances. The main interest of analysis is focused on the differences of group means; however, ANOVA focuses on the difference of variances. The illustrated figures would serve as a suitable guide to understand how ANOVA determines the mean difference problems by using between and within group variance differences.
+JA  - Korean Journal of Anesthesiology
+L2  - https://pubmed.ncbi.nlm.nih.gov/28184262
+U1  - 28184262
+U2  - 2586483808
+ER  - 
+TY  - JOUR
+TI  - Teaching One‐Way <scp>ANOVA</scp> with engaging <scp>NBA</scp> data and R Shiny within a flexdashboard
+AU  - Danielle Sisso
+AU  - Nicole Bass
+AU  - Immanuel Williams
+DO  - 10.1111/test.12332
+PY  - 2023
+AB  - Abstract This paper provides introductory statistics instructors with the capacity to use engaging National Basketball Association (NBA) data within a web application to either strengthen students' understanding or introduce the concept of variance and one‐way analysis of variance. Using engaging data within the classroom provides context to data that students deem applicable to their lives. This paper not only provides a lesson plan for teaching these concepts but also provides a web application and the engaging NBA dataset if the instructor decides to use the app or the data in another context. The NBA data selected to focus on the debate “Who is the greatest NBA player of all time?”. By using context students are familiar with and interested in, we can get them interested in and further engaged in statistics.
+JA  - Teaching Statistics
+L2  - https://doi.org/10.1111/test.12332
+U2  - 4361217484
+ER  - 
+TY  - JOUR
+TI  - Teaching Statistics and Data Analysis with R
+AU  - Mary C. Tucker
+AU  - Mary C. Tucker
+AU  - Stacy T. Shaw
+AU  - Stacy T. Shaw
+AU  - Ji Young Son
+AU  - Ji Y. Son
+AU  - James W. Stigler
+AU  - James W. Stigler
+DO  - 10.1080/26939169.2022.2089410
+PY  - 2022
+AB  - We developed an interactive online textbook that interleaves R programming activities with text as a way to facilitate students’ understanding of statistical ideas while minimizing the cognitive and emotional burden of learning programming. In this exploratory study, we characterize the attitudes and experiences of 672 undergraduate students as they used our online textbook as part of a 10-week introductory course in statistics. Students expressed negative attitudes and concerns related to R at the beginning of the course, but most developed more positive attitudes after engaging with course materials, regardless of demographic characteristics or prior programming experience. Analysis of a subgroup of students revealed that change in attitudes toward R may be linked to students’ patterns of engagement over time and students’ perceptions of the learning environment.
+JA  - Journal of Statistics and Data Science Education
+L2  - https://doi.org/10.1080/26939169.2022.2089410
+U2  - 4282825881
+ER  - 
+TY  - JOUR
+TI  - USE OF DATA VISUALISATION IN THE TEACHING OF STATISTICS: A NEW ZEALAND PERSPECTIVE
+AU  - Sharleen Forbes
+AU  - Sharleen Forbes
+AU  - J. A. Chapman
+AU  - Jeanette Chapman
+AU  - John Harraway
+AU  - John Harraway
+AU  - Doug Stirling
+AU  - Doug Stirling
+AU  - Doug Stirling
+AU  - Chris Wild
+AU  - Chris J. Wild
+DO  - 
+PY  - 2014
+AB  - For many years, students have been taught to visualise data by drawing graphs. Recently, there has been a growing trend to teach statistics, particularly statistical concepts, using interactive and dynamic visualisation tools. Free down-loadable teaching and simulation software designed specifically for schools, and more general data visualisation tools are increasingly being used in New Zealand classrooms. This paper discusses four examples: the use of GenStat for Teaching and Learning Schools and Undergraduate (GTL); Auckland University’s iNZight and VIT (Visual Inference Tools) for teaching bootstrapping and randomisation; the CAST e-books, and the use of data visualisation tools to assist learning concepts in official statistics. All these tools are publically available and several are already being used internationally.
+JA  - Statistics Education Research Journal
+L2  - https://www.semanticscholar.org/paper/74273946ce302282e3caad2ccdd5d953a066c55c
+U2  - 2187212154
+ER  - 
+TY  - JOUR
+TI  - Data Visualization on Day One: Bringing Big Ideas into Intro Stats Early and Often
+AU  - Xiaofei Wang
+AU  - Xiaofei Wang
+AU  - Cynthia Rush
+AU  - Cynthia Rush
+AU  - Nicholas J. Horton
+AU  - Nicholas J. Horton
+DO  - 
+PY  - 2017
+AB  - In a world awash with data, the ability to think and compute with data has become an important skill for students in many fields. For that reason, inclusion of some level of statistical computing in many introductory-level courses has grown more common in recent years. Existing literature has documented multiple success stories of teaching statistics with R, bolstered by the capabilities of R Markdown. In this article, we present an in-class data visualization activity intended to expose students to R and R Markdown during the first week of an introductory statistics class. The activity begins with a brief lecture on exploratory data analysis in R. Students are then placed in small groups tasked with exploring a new dataset to produce three visualizations that describe particular insights that are not immediately obvious from the data. Upon completion, students will have produced a series of univariate and multivariate visualizations on a real dataset and practiced describing them.
+JA  - arXiv: Other Statistics
+L2  - https://www.semanticscholar.org/paper/3fdfc646ad26facabb91c6fbf3abed1bd2c84019
+U2  - 2617372116
+ER  - 
+TY  - JOUR
+TI  - Bringing Visual Inference to the Classroom
+AU  - Adam Loy
+AU  - Adam Loy
+DO  - 10.1080/26939169.2021.1920866
+PY  - 2020
+AB  - In the classroom, we traditionally visualize inferential concepts using static graphics or interactive apps. For example, there is a long history of using apps to visualize sampling distributions. Recent developments in statistical graphics have created an opportunity to bring additional visualizations into the classroom to hone student understanding. Specifically, the lineup protocol for visual inference provides a framework for students see the difference between signal and noise by embedding a plot of observed data in a field of null (noise) plots. Lineups have proven valuable in visualizing randomization/permutation tests, diagnosing models, and even conducting valid inference when distributional assumptions break down. This paper provides an overview of how the lineup protocol for visual inference can be used to hone understanding of key statistical topics throughout the statistics curricula.
+JA  - 
+L2  - https://doi.org/10.1080/26939169.2021.1920866
+U2  - 3036901530
+ER  - 
+TY  - JOUR
+TI  - Students' Misconceptions in Interpreting Center and Variability of Data Represented via Histograms and Stem-and-Leaf Plots
+AU  - Linda L. Cooper
+AU  - Linda L. Cooper
+AU  - Felice S. Shore
+AU  - Felice S. Shore
+DO  - 10.1080/10691898.2008.11889559
+PY  - 2008
+AB  - This paper identifies and discusses misconceptions that students have in making judgments of center and variability when data are presented graphically. An assessment addressing interpreting center and variability in histograms and stem-and-leaf plots was administered to, and follow-up interviews were conducted with, undergraduates enrolled in introductory statistics courses. Assessment items focused upon comparing the variability of two data sets of common range represented by bell-shaped histograms on a common scale, computing measures of center from data extracted from graphs, and in comparing the relative location of the mean and median on a histogram from skewed data. Students' misconceptions often stemmed from their difficulty in maintaining understanding of the data that are being represented graphically.
+JA  - Journal of Statistics Education
+L2  - https://doi.org/10.1080/10691898.2008.11889559
+U2  - 44031871
+ER  - 
+TY  - JOUR
+TI  - Using R as a Simulation Tool in Teaching Introductory Statistics
+AU  - Xuemao Zhang
+AU  - Xuemao Zhang
+AU  - Zoe Maas
+AU  - Zoe Maas
+DO  - 10.29333/iejme/5773
+PY  - 2019
+AB  - The use of computer simulations in the teaching of introductory statistics can help undergraduate students understand difficult or abstract statistics concepts. The free software environment R is a good candidate for computer simulations since it allows users to add additional functionality by defining new functions. In this paper, we illustrate how computer simulations with R are used in statistics classrooms and student homework assignments by examples. These examples include sampling distributions and the central limit theorem, the t-distributions, confidence intervals, hypothesis testing, regression analysis and nonparametric tests.
+JA  - Journal on Mathematics Education
+L2  - https://doi.org/10.29333/iejme/5773
+U2  - 2945419591
+ER  - 
+TY  - JOUR
+TI  - Students’ misconceptions of statistical inference: A review of the empirical evidence from research on statistics education
+AU  - Ana Elisa Castro Sotos
+AU  - Ana Elisa Castro Sotos
+AU  - Stijn Vanhoof
+AU  - Stijn Vanhoof
+AU  - Wim Van den Noortgate
+AU  - Wim Van Den Noortgate
+AU  - Wim Van den Noortgate
+AU  - Patrick Onghena
+AU  - Patrick Onghena
+DO  - 10.1016/j.edurev.2007.04.001
+PY  - 2007
+AB  - Abstract   A solid understanding of  inferential statistics  is of major importance for designing and interpreting empirical results in any scientific discipline. However, students are prone to many misconceptions regarding this topic. This article structurally summarizes and describes these misconceptions by presenting a systematic review of publications that provide empirical evidence of them. This group of publications was found to be dispersed over a wide range of specialized journals and proceedings, and the methodology used in the empirical studies was very diverse. Three research needs rise from this review: (1) further empirical studies that identify the sources and possible solutions for misconceptions in order to complement the abundant theoretical and statistical discussion about them; (2) new insights into effective research designs and methodologies to perform this type of research; and (3) structured and systematic summaries of findings like the one presented here, concerning misconceptions in other areas of statistics, that might be of interest both for educational researchers and teachers of statistics.
+JA  - Educational Research Review
+L2  - https://doi.org/10.1016/j.edurev.2007.04.001
+U2  - 2093366163
+ER  - 

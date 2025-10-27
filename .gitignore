@@ -29,3 +29,8 @@ data/*.xlsx
 01-Artículo/
 ANOVAlab v0/
 ANOVAlab v1/
+.httr-oauth
+.quarto
+
+# ARchivos personales
+Mejoras.Rmd
