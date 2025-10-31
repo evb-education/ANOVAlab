@@ -28,7 +28,7 @@
 
 **Notas:**
 
--   Se asume **nivel de significación alfa = 0,05**
+-   Se asume **nivel de significación alfa = 0,05.**
 
 -   Se asume **homocedasticidad** en las poblaciones
 
