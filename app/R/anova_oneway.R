@@ -19,7 +19,7 @@ plot_oneway_violins_labeled <- function(dat, fit){
     annotate("label", x = Inf, y = gm,
              label = paste0("Media general = ", sprintf("%.2f", gm)),
              vjust = -0.4, hjust = 1.02, size = 3, fill = "white") +
-    labs(x="Grupo", y="Respuesta", title="Diagrama de violines por grupos") +
+    labs(x="Grupo", y="Respuesta", title="Diagrama de violines por variantes / niveles (grupos)") +
     theme_minimal()
 }
 
@@ -43,7 +43,7 @@ anova_oneway_fit <- function(dat){
   anova_table <- tidy %>%
     transmute(
       `Fuente` = recode(term, "grupo"="Entre grupos", "Residuals"="Residual"),
-      `Suma de Cuadrados` = sumsq, `Grados de libertad`=df,
+      `Suma de Cuadrados` = sumsq, `Grados de libertad`=as.integer(df),
       `Cuadrado medio`=meansq, `F`=statistic, `p-valor`=p.value
     )
   
@@ -56,7 +56,7 @@ plot_sc_oner_stacked_horizontal <- function(df, scale=c("Valor","Porcentaje"), c
   scale <- match.arg(scale)
   g <- ggplot(df, aes(x="Total", y=valor, fill=Componente)) +
     geom_col(width = .6) + coord_flip() +
-    theme_minimal() + labs(x=NULL, y="Suma de Cuadrados", caption=caption) +
+    theme_minimal() + labs(x=NULL, y="Suma de Cuadrados Total", caption=caption) +
     theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
   if(scale=="Porcentaje"){
     tot <- sum(df$valor)
@@ -82,27 +82,37 @@ plot_oneway_segments_jitter <- function(dat, fit, mode = "Ambos"){
   
   ggplot(J, aes(x=xj, y=y, color = grupo)) +
     geom_point(alpha=.7) +
-    { if(show_scr) geom_segment(aes(x=xj, xend=xj, y=y, yend=media),
-                                linewidth=0.6, color="firebrick", alpha=.9) } +
+    (if (show_scr) geom_segment(aes(x=xj, xend=xj, y=y, yend=media),
+                                linewidth=0.6, color="firebrick", alpha=.9) else NULL) +
     # Punto de media de grupo + etiqueta de su valor
     stat_summary(data = mu_g, aes(x = as.numeric(grupo), y = media),
                  fun=mean, geom="point", size=3, color="black", inherit.aes = FALSE) +
     geom_text(data = mu_g,
               aes(x = as.numeric(grupo), y = media, label = sprintf("%.2f", media)),
               vjust = -1, color = "black", inherit.aes = FALSE) +
-    { if(show_sce) geom_segment(data=mu_g,
+    (if (show_sce) geom_segment(data=mu_g,
                                 aes(x=as.numeric(grupo), xend=as.numeric(grupo),
                                     y=media, yend=gm),
-                                inherit.aes = FALSE, color="black", linewidth=1.1) } +
+                                inherit.aes = FALSE, color="black", linewidth=1.1) else NULL) +
     geom_hline(yintercept = gm, linetype="dashed", color="black") +
     annotate("label", x = Inf, y = gm,
              label = paste0("Media general = ", sprintf("%.2f", gm)),
              vjust = -0.4, hjust = 1.02, size = 3, fill = "white") +
     scale_x_continuous(breaks = unique(as.numeric(dat$grupo)),
                        labels = levels(dat$grupo)) +
-    labs(x="Grupo", y="Respuesta",
-         title="Descomposición geométrica: SCR (punto→media) y SCE (media→μ)",
-         caption="SCR (rojo): distancia del dato a su media de grupo · SCE (negro): distancia de la media de grupo a la media general (μ).") +
-    theme_minimal()
+    labs(
+      x = "Grupo",
+      y = "Respuesta",
+      title = paste(
+        "Descomposición geométrica:",
+        "Segmentos en rojo → distancias de cada observación a la media del grupo (SCR).",
+        "Segmentos en negro → distancias de la media de cada grupo a la media general (SCE).",
+        sep = "\n"
+      )
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(size = 14, face = "bold", lineheight = 1.1)
+    )
 }
 

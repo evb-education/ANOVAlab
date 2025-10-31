@@ -9,10 +9,10 @@ mod_one_factor_ui <- function(id){
     sidebarLayout(
       sidebarPanel(
         numericInput(ns("seed"), "Semilla", 123),
-        numericInput(ns("k"), "Número de grupos (k)", 3, min = 2),
-        numericInput(ns("n"), "n por grupo", 20, min = 2),
-        sliderInput(ns("delta"), "δ (Tamaño de efecto)", 0, 3, 1, step = 0.1),
-        sliderInput(ns("sigma"), "σ (Desviación Típica teórica de las poblaciones.Es la misma para todos los grupos (homocedasticidad)))", 0.1, 3, 1, step = 0.1),
+        numericInput(ns("k"), "Número de variantes / niveles (I). Grupos", 3, min = 2),
+        numericInput(ns("n"), "nº de observaciones por variante / nivel (ni). Se asume que todas las muestras tienen el mismo número de observaciones.", 20, min = 2),
+        sliderInput(ns("delta"), "δ (Tamaño de efecto a detectar)", 0, 3, 1, step = 0.1),
+        sliderInput(ns("sigma"), "σ (Desviación Típica poblacional. Es la misma para todas las poblaciones (homocedasticidad)", 0.1, 3, 1, step = 0.1),
         actionButton(ns("regen"), "Regenerar 1-factor")
       ),
       mainPanel(
@@ -75,7 +75,7 @@ mod_one_factor_server <- function(id){
   
     output$plot_sc_h <- renderPlot({
       plot_sc_oner_stacked_horizontal(fit()$sc_long, scale = input$scale_sc,
-                                      caption = "SCE (entre grupos) + SCR (residual) = Total")
+                                      caption = "SCE (entre grupos) + SCR (residual) = SCT (total)")
     })
     
   })

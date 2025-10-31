@@ -9,13 +9,13 @@ mod_two_factors_ui <- function(id){
   fluidPage(
     sidebarLayout(
       sidebarPanel(
-        numericInput(ns("I"), "Niveles A", 3, min = 2),
-        numericInput(ns("J"), "Niveles B", 3, min = 2),
-        numericInput(ns("n"), "n por celda", 10, min = 1),
-        sliderInput(ns("effA"),  "Efecto A", 0, 3, 1, step = 0.1),
-        sliderInput(ns("effB"),  "Efecto B", 0, 3, 1, step = 0.1),
-        sliderInput(ns("intAB"), "Interacción A×B", -3, 3, 0, step = 0.1),
-        sliderInput(ns("sigma"), "σ (Desviación Típica)", 0.1, 3, 1, step = 0.1),
+        numericInput(ns("I"), "Variantes / niveles Factor 1 (A)", 3, min = 2),
+        numericInput(ns("J"), "Variantes / niveles Factor 1 (B)", 3, min = 2),
+        numericInput(ns("n"), "n° de observaciones por tratamiento (nij).Todos los tratamientos tienen el mismo n° de observaciones.", 10, min = 1),
+        sliderInput(ns("effA"),  "Efecto a detectar del Factor 1 (A)", 0, 3, 1, step = 0.1),
+        sliderInput(ns("effB"),  "Efecto a detectar del Factor 1 (B)", 0, 3, 1, step = 0.1),
+        sliderInput(ns("intAB"), "Efecto conjunto a detectar. Interacción (A×B)", -3, 3, 0, step = 0.1),
+        sliderInput(ns("sigma"), "σ (Desviación típica poblacional (Homocedasticidad)", 0.1, 3, 1, step = 0.1),
         checkboxInput(ns("show_lsd_main"), "Mostrar intervalos LSD (efectos simples)", TRUE),
         checkboxInput(ns("show_lsd_simple"), "LSD por efectos simples condicionados (si hay interacción)", FALSE),
         selectInput(ns("lsd_on"), "Aplicar LSD a:", c("Factor A","Factor B")),
