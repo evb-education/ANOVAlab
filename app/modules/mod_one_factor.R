@@ -12,7 +12,7 @@ mod_one_factor_ui <- function(id){
         numericInput(ns("k"), "Número de grupos (k)", 3, min = 2),
         numericInput(ns("n"), "n por grupo", 20, min = 2),
         sliderInput(ns("delta"), "δ (Tamaño de efecto)", 0, 3, 1, step = 0.1),
-        sliderInput(ns("sigma"), "σ (Desviación Típica)", 0.1, 3, 1, step = 0.1),
+        sliderInput(ns("sigma"), "σ (Desviación Típica teórica de las poblaciones.Es la misma para todos los grupos (homocedasticidad)))", 0.1, 3, 1, step = 0.1),
         actionButton(ns("regen"), "Regenerar 1-factor")
       ),
       mainPanel(
