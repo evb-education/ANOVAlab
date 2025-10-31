@@ -12,7 +12,7 @@ mod_one_factor_ui <- function(id){
         numericInput(ns("k"), "Número de variantes / niveles (I). Grupos", 3, min = 2),
         numericInput(ns("n"), "nº de observaciones por variante / nivel (ni). Se asume que todas las muestras tienen el mismo número de observaciones.", 20, min = 2),
         sliderInput(ns("delta"), "δ (Tamaño de efecto a detectar)", 0, 3, 1, step = 0.1),
-        sliderInput(ns("sigma"), "σ (Desviación Típica poblacional. Es la misma para todas las poblaciones (homocedasticidad)", 0.1, 3, 1, step = 0.1),
+        sliderInput(ns("sigma"), "σ (Desviación Típica poblacional).  Es la misma para todas las poblaciones (homocedasticidad)", 0.1, 3, 1, step = 0.1),
         actionButton(ns("regen"), "Regenerar 1-factor")
       ),
       mainPanel(

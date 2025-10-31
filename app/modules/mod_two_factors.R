@@ -1,54 +1,73 @@
-# ANOVAlab — mod_two_factors.R
-# Dos factores (2F): ANOVA, violines por poblaciones (A×B), gráfico de interacción
-# con media general y etiquetas de medias, y opción de intervalos LSD (efectos simples
-# y, opcionalmente, efectos simples condicionados cuando hay interacción).
+# modules/mod_two_factors.R
 
-# 2 FACTORES — 2 pestañas: Datos | Representaciones
+# Fallback local por si no se cargó app/R/gen_data.R
+if (!exists("gen_data_twoway")) {
+  gen_data_twoway <- function(I = 3, J = 3, n = 10,
+                              effA = 1, effB = 1, intAB = 0, sigma = 1,
+                              seed = 123) {
+    set.seed(seed)
+    A <- factor(rep(LETTERS[seq_len(I)], each = J * n), levels = LETTERS[seq_len(I)])
+    B <- factor(rep(letters[seq_len(J)], times = I, each = n), levels = letters[seq_len(J)])
+    a_i  <- effA * seq(-1, 1, length.out = I)
+    b_j  <- effB * seq(-1, 1, length.out = J)
+    ab_ij <- intAB * outer(a_i, b_j)
+    mu_mat <- outer(a_i, b_j, `+`) + ab_ij
+    mu_vec <- as.vector(t(mu_mat))
+    y <- unlist(lapply(mu_vec, function(mu) stats::rnorm(n, mean = mu, sd = sigma)))
+    data.frame(y = y, A = A, B = B)
+  }
+}
+
 mod_two_factors_ui <- function(id){
   ns <- NS(id)
-  fluidPage(
-    sidebarLayout(
-      sidebarPanel(
-        numericInput(ns("I"), "Variantes / niveles Factor 1 (A)", 3, min = 2),
-        numericInput(ns("J"), "Variantes / niveles Factor 1 (B)", 3, min = 2),
-        numericInput(ns("n"), "n° de observaciones por tratamiento (nij).Todos los tratamientos tienen el mismo n° de observaciones.", 10, min = 1),
-        sliderInput(ns("effA"),  "Efecto a detectar del Factor 1 (A)", 0, 3, 1, step = 0.1),
-        sliderInput(ns("effB"),  "Efecto a detectar del Factor 1 (B)", 0, 3, 1, step = 0.1),
-        sliderInput(ns("intAB"), "Efecto conjunto a detectar. Interacción (A×B)", -3, 3, 0, step = 0.1),
-        sliderInput(ns("sigma"), "σ (Desviación típica poblacional (Homocedasticidad)", 0.1, 3, 1, step = 0.1),
-        checkboxInput(ns("show_lsd_main"), "Mostrar intervalos LSD (efectos simples)", TRUE),
-        checkboxInput(ns("show_lsd_simple"), "LSD por efectos simples condicionados (si hay interacción)", FALSE),
-        selectInput(ns("lsd_on"), "Aplicar LSD a:", c("Factor A","Factor B")),
-        numericInput(ns("alpha"), "Nivel α", 0.05, min = 0.001, max = 0.2, step = 0.005),
-        actionButton(ns("regen"), "Regenerar 2-factores")
-      ),
-      mainPanel(
-        tabsetPanel(
-          tabPanel("Datos",
-                   tableOutput(ns("tbl_data"))
-          ),
-          tabPanel("Representaciones",
-                   # 1) Violines A×B
-                   plotOutput(ns("plot_violins_ab"), height = "340px"),
-                   tags$br(),
-                   # 2) Segmentos A×B
-                   plotOutput(ns("plot_segments_ab"), height = "340px"),
-                   tags$br(),
-                   # 3) Tabla ANOVA (terminología UD)
-                   tableOutput(ns("tbl_anova_ud")),
-                   # 3b) SC apilada (horizontal) justo debajo de la tabla
-                   tags$br(),
-                   plotOutput(ns("plot_sc_h"), height = "260px"),
-                   tags$br(),
-                   # 4) Interacción (líneas + etiquetas, sin LSD)
-                   plotOutput(ns("plot_inter"), height = "360px"),
-                   tags$br(),
-                   # 5) LSD efectos simples (gráfico aparte)
-                   plotOutput(ns("plot_lsd_main"), height = "340px"),
-                   tags$br(),
-                   # 6) Interacción (LSD) — simples condicionados
-                   plotOutput(ns("plot_lsd_simple"), height = "360px")
-          )
+  sidebarLayout(
+    sidebarPanel(
+      width = 3,
+      # Controles con los textos que mostraste en la captura
+      numericInput(ns("I"), "Variantes / niveles Factor 1 (A)", value = 3, min = 2, step = 1),
+      numericInput(ns("J"), "Variantes / niveles Factor 1 (B)", value = 3, min = 2, step = 1),
+      numericInput(ns("n"), "nº de observaciones por tratamiento (nij).Todos los tratamientos tienen el mismo nº de observaciones.", value = 10, min = 1, step = 1),
+      
+      sliderInput(ns("effA"),  "Efecto a detectar del Factor 1 (A)", min = 0,  max = 3,  value = 1, step = 0.1),
+      sliderInput(ns("effB"),  "Efecto a detectar del Factor 1 (B)", min = 0,  max = 3,  value = 1, step = 0.1),
+      sliderInput(ns("intAB"), "Efecto conjunto a detectar. Interacción (A×B)", min = -3, max = 3, value = 0, step = 0.1),
+      sliderInput(ns("sigma"), "σ (Desviación típica poblacional (Homocedasticidad))", min = 0.1, max = 3, value = 1, step = 0.1),
+      
+      tags$hr(),
+      checkboxInput(ns("show_lsd_factors"), "Mostrar LSD de factores (A y B)", value = TRUE),
+      radioButtons(ns("interaction_mode"), "Interacción:",
+                   choices  = c("Solo líneas" = "lines", "LSD verticales" = "lsd", "Ninguno" = "none"),
+                   selected = "lines"),
+      radioButtons(ns("segments_mode"), "Resaltar segmentos:",
+                   choices = c("Ambos" = "both",
+                               "SCR (residual)" = "scr",
+                               "SCE (entre combinaciones)" = "sce",
+                               "Ninguno" = "none"),
+                   selected = "both")
+    ),
+    mainPanel(
+      width = 9,
+      tabsetPanel(
+        id = ns("tabs"), type = "tabs",  # 👈 forzamos tabs
+        
+        # ---- Pestaña DATOS ----
+        tabPanel("Datos",
+                 tableOutput(ns("tabla_datos"))
+        ),
+        
+        # ---- Pestaña REPRESENTACIONES ----
+        tabPanel("Representaciones",
+                 # 1) Violines
+                 plotOutput(ns("plot_violins")),
+                 # 2) Segmentos
+                 plotOutput(ns("plot_segments")),
+                 # 3) Tabla resumen ANOVA
+                 tableOutput(ns("tabla_anova")),
+                 # 4) Barra apilada SCT
+                 plotOutput(ns("plot_sc")),
+                 # (lo que ya te funciona)
+                 plotOutput(ns("plot_interaction")),
+                 plotOutput(ns("plot_lsd_factors"))
         )
       )
     )
@@ -58,58 +77,69 @@ mod_two_factors_ui <- function(id){
 mod_two_factors_server <- function(id){
   moduleServer(id, function(input, output, session){
     
-    # --- CARGA ROBUSTA DE FUNCIONES (soporta app lanzada desde raíz o desde app/) ---
-    try({
-      source(file.path("R","gen_data.R"),        local = TRUE)
-      source(file.path("R","anova_twoway.R"),    local = TRUE)
-    }, silent = TRUE)
-    if (!exists("anova_twoway_fit")) {
-      # fallback: estructura ANOVAlab/app/R/...
-      source(file.path("app","R","gen_data.R"),     local = TRUE)
-      source(file.path("app","R","anova_twoway.R"), local = TRUE)
-    }
-    # Comprobación final (si fallara, mensaje claro):
-    stopifnot(
-      exists("anova_twoway_fit"),
-      exists("plot_twoway_violins_labeled"),
-      exists("plot_sc_twoway_stacked_horizontal"),
-      exists("plot_interaction_labels_only"),
-      exists("plot_LSD_main"),
-      exists("plot_LSD_simple"),
-      exists("plot_twoway_segments")
-    )
-    
-    ns <- session$ns
-    
-    dat <- reactiveVal(NULL)
-    observeEvent(input$regen, {
-      dat(gen_twoway_from_sliders(I = input$I, J = input$J, n = input$n,
-                                  effA = input$effA, effB = input$effB,
-                                  intAB = input$intAB, sigma = input$sigma))
-    }, ignoreInit = TRUE)
-    observeEvent(TRUE, { dat(gen_twoway_from_sliders(3,3,10,1,1,0,1)) }, once = TRUE)
-    
-    fit <- reactive({ req(dat()); anova_twoway_fit(dat(), alpha = input$alpha) })
-    
-    # Datos
-    output$tbl_data  <- renderTable(dat(), striped = TRUE, bordered = TRUE)
-    
-    # Representaciones (orden que pediste)
-    output$plot_violins_ab <- renderPlot({ plot_twoway_violins_labeled(dat(), fit()) })
-    output$plot_segments_ab <- renderPlot({ plot_twoway_segments(dat(), fit()) })
-    output$tbl_anova_ud <- renderTable({ fit()$anova_table }, digits = 4)
-    output$plot_sc_h <- renderPlot({
-      plot_sc_twoway_stacked_horizontal(
-        fit()$sc_long, scale = "Valor",
-        caption = "SCA (por A) · SCB (por B) · SCA×B (interacción) · SCR (residual)"
+    # --- Datos simulados (balanceado) ---
+    dat <- reactive({
+      gen_data_twoway(
+        I     = input$I,
+        J     = input$J,
+        n     = input$n,
+        effA  = input$effA,
+        effB  = input$effB,
+        intAB = input$intAB,
+        sigma = input$sigma
       )
     })
-    output$plot_inter <- renderPlot({ plot_interaction_labels_only(fit()) })
-    output$plot_lsd_main <- renderPlot({
-      plot_LSD_main(fit(), lsd_on = input$lsd_on, show = isTRUE(input$show_lsd_main))
+    
+    # --- Ajuste ANOVA + resúmenes ---
+    fit <- reactive({
+      req(dat())
+      anova_twoway_fit(dat(), alpha = 0.05)
     })
-    output$plot_lsd_simple <- renderPlot({
-      plot_LSD_simple(fit(), lsd_on = input$lsd_on, show = isTRUE(input$show_lsd_simple))
+    
+    # ==================== SALIDAS ====================
+    
+    # Pestaña "Datos"
+    output$tabla_datos <- renderTable({
+      req(dat())
+      dat()
     })
+    
+    # Representaciones — 1) Violines
+    output$plot_violins <- renderPlot({
+      req(dat(), fit())
+      plot_twoway_violins_labeled(dat(), fit())
+    })
+    
+    # Representaciones — 2) Segmentos
+    # 2) Segmentos
+    output$plot_segments <- renderPlot({
+      req(dat(), fit())
+      plot_twoway_segments_labeled(dat(), fit(), mode = input$segments_mode)
+    })
+    
+    # Representaciones — 3) Tabla ANOVA
+    output$tabla_anova <- renderTable({
+      req(fit())
+      fit()$anova_table
+    }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 4)
+    
+    # Representaciones — 4) Barra apilada SCT
+    output$plot_sc <- renderPlot({
+      req(fit())
+      plot_sc_twoway_stacked_horizontal(fit()$sc_long, scale = "Valor")
+    })
+    
+    # Interacción (modo)
+    output$plot_interaction <- renderPlot({
+      req(fit())
+      plot_interaction_mode(fit(), mode = input$interaction_mode)
+    })
+    
+    # LSD factores (A y B simultáneo)
+    output$plot_lsd_factors <- renderPlot({
+      req(fit())
+      plot_LSD_marginals(fit(), show = isTRUE(input$show_lsd_factors))
+    })
+    
   })
 }
