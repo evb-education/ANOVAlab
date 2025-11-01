@@ -56,7 +56,7 @@ plot_sc_oner_stacked_horizontal <- function(df, scale=c("Valor","Porcentaje"), c
   scale <- match.arg(scale)
   g <- ggplot(df, aes(x="Total", y=valor, fill=Componente)) +
     geom_col(width = .6) + coord_flip() +
-    theme_minimal() + labs(x=NULL, y="Suma de Cuadrados Total", caption=caption) +
+    theme_minimal() + labs(x=NULL, y="SCT = SCE + SCR", caption=caption) +
     theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
   if(scale=="Porcentaje"){
     tot <- sum(df$valor)
@@ -104,7 +104,6 @@ plot_oneway_segments_jitter <- function(dat, fit, mode = "Ambos"){
       x = "Grupo",
       y = "Respuesta",
       title = paste(
-        "Descomposición geométrica:",
         "Segmentos rojos: distancias de cada observación a la media de cada variante/nivel (grupo). Usados en al cálculo de la SCR.",
         "Segmentos negros: distancias de la media de cada variante/nivel (grupo) a la media general. Usados en al cálculo de la SCE.",
         sep = "\n"
