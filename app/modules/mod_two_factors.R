@@ -139,7 +139,7 @@ mod_two_factors_server <- function(id){
     output$tabla_anova <- renderTable({
       req(fit())
       fit()$anova_table
-    }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 4)
+    }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 4, na = "")
     
     # Representaciones — 4) Barra apilada SCT
     output$plot_sc <- renderPlot({

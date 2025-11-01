@@ -80,7 +80,7 @@ mod_one_factor_server <- function(id){
       plot_oneway_segments_jitter(dat(), fit(), mode = input$segm_mode)
     })
     
-    output$tbl_anova <- renderTable(fit()$anova_table, digits = 4)
+    output$tbl_anova <- renderTable(fit()$anova_table, digits = 4, na = "")
     
     output$plot_sc_h <- renderPlot({
       plot_sc_oner_stacked_horizontal(fit()$sc_long, scale = input$scale_sc,
