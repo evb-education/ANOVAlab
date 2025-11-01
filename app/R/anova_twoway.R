@@ -36,14 +36,29 @@ anova_twoway_fit <- function(dat, alpha = 0.05){
   
   anova_table <- tidy %>%
     dplyr::transmute(
-      `Fuente`             = dplyr::recode(term, A = "A", B = "B",
-                                           `A:B` = "A×B", Residuals = "Residual"),
-      `Suma de Cuadrados`  = sumsq,
-      `Grados de libertad` = df,
-      `Cuadrado medio`     = meansq,
-      `F`                  = statistic,
-      `p-valor`            = p.value
+      `Fuente` = dplyr::recode(term,
+                               A        = "A",
+                               B        = "B",
+                               `A:B`    = "A×B",
+                               Residuals= "Residual"),
+      `SC`  = sumsq,
+      `gl`  = as.integer(df),
+      `CM`  = meansq,
+      `F`   = statistic,
+      `p-valor` = p.value
     )
+  
+  # Fila Total (SCT y gl total = N-1)
+  total_row <- tibble::tibble(
+    `Fuente` = "Total",
+    `SC`     = sum(tidy$sumsq, na.rm = TRUE),  # SCT
+    `gl`     = sum(tidy$df,    na.rm = TRUE),  # N - 1
+    `CM`     = NA_real_,
+    `F`      = NA_real_,
+    `p-valor`= NA_real_
+  )
+  
+  anova_table <- dplyr::bind_rows(anova_table, total_row)
   
   list(
     fit = fit, mse = mse, dfR = dfR, grand = gm, alpha = alpha,
@@ -128,7 +143,6 @@ plot_twoway_segments <- function(dat, fit, mode = c("both","scr","sce","none")){
   # SCE: distancia de la media de cada combinación A×B a la media general (explicada total)
   #     En 2F: SCE = SCA + SCB + SCA×B
   nota <- paste(
-    "Interpretación geométrica:",
     "Segmentos rojos: distancias de cada observación a la media de su combinación de variantes / niveles de A×B. Usados en el cálculo de SCR",
     "Segmentos negros: distancias de las medias de las combinaciones de variantes / niveles A×B a la media general. Usados en el cálculo de SCE.",
     "Donde SCE = SCA + SCB + SCA×B.",

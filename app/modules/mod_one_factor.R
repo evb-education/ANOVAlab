@@ -21,20 +21,30 @@ mod_one_factor_ui <- function(id){
                    tableOutput(ns("tbl_data"))
           ),
           tabPanel("Representaciones",
-                   # 1) Segmentos
+                   # 1) Violines por grupos (PRIMERO)
+                   tags$h3("Distribución de las observaciones por variante / nivel (grupo)"),
+                   plotOutput(ns("plot_violin"), height = "340px"),
+                   
+                   # 2) Segmentos
+                   tags$br(),
                    radioButtons(ns("segm_mode"), "Resaltar segmentos:",
                                 c("Ambos","SCR (residual)","SCE (entre grupos)"),
                                 inline = TRUE),
+                   tags$h3("Representación geométrica de la descomposición de la variabilidad total"),
                    plotOutput(ns("plot_segments"), height = "360px"),
-                   # 2) Tabla ANOVA (terminología UD)
-                   tags$br(), tableOutput(ns("tbl_anova")),
-                   # 3) SC apilada (HORIZONTAL)
-                   tags$br(), radioButtons(ns("scale_sc"), "Escala de barras:",
-                                           c("Valor","Porcentaje"),
-                                           inline = TRUE, selected = "Valor"),
-                   plotOutput(ns("plot_sc_h"), height = "260px"),
-                   # 4) Violines por grupos
-                   tags$br(), plotOutput(ns("plot_violin"), height = "340px")
+                   
+                   # 3) Tabla ANOVA (terminología UD)
+                   tags$br(),
+                   tags$h3("Descomposición numérica de la variabilidad: tabla resumen del ANOVA"),
+                   tableOutput(ns("tbl_anova")),
+                   
+                   # 4) SC apilada (HORIZONTAL)
+                   tags$br(),
+                   radioButtons(ns("scale_sc"), "Escala de barras:",
+                                c("Valor","Porcentaje"),
+                                inline = TRUE, selected = "Valor"),
+                   tags$h3("Visualización de la descomposición de la variabilidad total"),
+                   plotOutput(ns("plot_sc_h"), height = "260px")
           )
         )
       )
@@ -70,9 +80,8 @@ mod_one_factor_server <- function(id){
       plot_oneway_segments_jitter(dat(), fit(), mode = input$segm_mode)
     })
     
-    output$tbl_anova <- renderTable(fit()$anova_table, digits = 4)
+    output$tbl_anova <- renderTable(fit()$anova_table, digits = 4, na = "")
     
-  
     output$plot_sc_h <- renderPlot({
       plot_sc_oner_stacked_horizontal(fit()$sc_long, scale = input$scale_sc,
                                       caption = "SCE (entre grupos) + SCR (residual) = SCT (total)")

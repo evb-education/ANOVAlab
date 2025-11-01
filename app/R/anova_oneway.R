@@ -41,11 +41,28 @@ anova_oneway_fit <- function(dat){
   )
   
   anova_table <- tidy %>%
-    transmute(
-      `Fuente` = recode(term, "grupo"="Entre grupos", "Residuals"="Residual"),
-      `Suma de Cuadrados` = sumsq, `Grados de libertad`=as.integer(df),
-      `Cuadrado medio`=meansq, `F`=statistic, `p-valor`=p.value
+    dplyr::transmute(
+      `Fuente` = dplyr::recode(term,
+                               grupo     = "Entre grupos",
+                               Residuals = "Residual"),
+      `SC`  = sumsq,
+      `gl`  = as.integer(df),
+      `CM`  = meansq,
+      `F`   = statistic,
+      `p-valor` = p.value
     )
+  
+  # Fila Total (SCT y gl total = N-1)
+  total_row <- tibble::tibble(
+    `Fuente` = "Total",
+    `SC`     = sum(tidy$sumsq, na.rm = TRUE),   # SCT
+    `gl`     = sum(tidy$df,    na.rm = TRUE),   # N - 1
+    `CM`     = NA_real_,
+    `F`      = NA_real_,
+    `p-valor`= NA_real_
+  )
+  
+  anova_table <- dplyr::bind_rows(anova_table, total_row)
   
   list(fit=fit, mse=mse, dfR=dfR, grand=gm, means=means, sc_long=sc_long,
        anova_table=anova_table)
@@ -56,7 +73,7 @@ plot_sc_oner_stacked_horizontal <- function(df, scale=c("Valor","Porcentaje"), c
   scale <- match.arg(scale)
   g <- ggplot(df, aes(x="Total", y=valor, fill=Componente)) +
     geom_col(width = .6) + coord_flip() +
-    theme_minimal() + labs(x=NULL, y="Suma de Cuadrados Total", caption=caption) +
+    theme_minimal() + labs(x=NULL, y="SCT = SCE + SCR", caption=caption) +
     theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
   if(scale=="Porcentaje"){
     tot <- sum(df$valor)
@@ -104,7 +121,6 @@ plot_oneway_segments_jitter <- function(dat, fit, mode = "Ambos"){
       x = "Grupo",
       y = "Respuesta",
       title = paste(
-        "Descomposición geométrica:",
         "Segmentos rojos: distancias de cada observación a la media de cada variante/nivel (grupo). Usados en al cálculo de la SCR.",
         "Segmentos negros: distancias de la media de cada variante/nivel (grupo) a la media general. Usados en al cálculo de la SCE.",
         sep = "\n"

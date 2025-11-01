@@ -24,6 +24,7 @@ mod_two_factors_ui <- function(id){
     sidebarPanel(
       width = 3,
       # Controles con los textos que mostraste en la captura
+      numericInput(ns("seed"), "Semilla", value = 123, step = 1), # <--- NUEVO
       numericInput(ns("I"), "Variantes / niveles Factor 1 (A)", value = 3, min = 2, step = 1),
       numericInput(ns("J"), "Variantes / niveles Factor 1 (B)", value = 3, min = 2, step = 1),
       numericInput(ns("n"), "nº de observaciones por tratamiento (nij).Todos los tratamientos tienen el mismo nº de observaciones.", value = 10, min = 1, step = 1),
@@ -48,7 +49,7 @@ mod_two_factors_ui <- function(id){
     mainPanel(
       width = 9,
       tabsetPanel(
-        id = ns("tabs"), type = "tabs",  # 👈 forzamos tabs
+        id = ns("tabs"), type = "tabs",
         
         # ---- Pestaña DATOS ----
         tabPanel("Datos",
@@ -57,16 +58,33 @@ mod_two_factors_ui <- function(id){
         
         # ---- Pestaña REPRESENTACIONES ----
         tabPanel("Representaciones",
-                 # 1) Violines
+                 # 1) Violines (ya primero)
+                 tags$h3("Distribución de las observaciones por tratamiento (A×B)"),
                  plotOutput(ns("plot_violins")),
+                 
                  # 2) Segmentos
+                 tags$br(),
+                 tags$h3("Representación geométrica de la descomposición de la variabilidad (A, B, A×B)"),
                  plotOutput(ns("plot_segments")),
+                 
                  # 3) Tabla resumen ANOVA
+                 tags$br(),
+                 tags$h3("Descomposición numérica de la variabilidad: tabla resumen del ANOVA"),
                  tableOutput(ns("tabla_anova")),
+                 
                  # 4) Barra apilada SCT
+                 tags$br(),
+                 tags$h3("Visualización de la descomposición de la variabilidad total"),
                  plotOutput(ns("plot_sc")),
-                 # (lo que ya te funciona)
+                 
+                 # 5) Interacción
+                 tags$br(),
+                 tags$h3("Gráfico de Interacción (A×B)"),
                  plotOutput(ns("plot_interaction")),
+                 
+                 # 6) LSD factores
+                 tags$br(),
+                 tags$h3("Intervalos LSD"),
                  plotOutput(ns("plot_lsd_factors"))
         )
       )
@@ -86,7 +104,8 @@ mod_two_factors_server <- function(id){
         effA  = input$effA,
         effB  = input$effB,
         intAB = input$intAB,
-        sigma = input$sigma
+        sigma = input$sigma,
+        seed  = input$seed         # <--- NUEVO
       )
     })
     
@@ -111,7 +130,6 @@ mod_two_factors_server <- function(id){
     })
     
     # Representaciones — 2) Segmentos
-    # 2) Segmentos
     output$plot_segments <- renderPlot({
       req(dat(), fit())
       plot_twoway_segments_labeled(dat(), fit(), mode = input$segments_mode)
@@ -121,7 +139,7 @@ mod_two_factors_server <- function(id){
     output$tabla_anova <- renderTable({
       req(fit())
       fit()$anova_table
-    }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 4)
+    }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 4, na = "")
     
     # Representaciones — 4) Barra apilada SCT
     output$plot_sc <- renderPlot({
