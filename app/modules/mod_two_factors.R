@@ -68,22 +68,22 @@ mod_two_factors_ui <- function(id){
                  
                  # 3) Tabla resumen ANOVA
                  tags$br(),
-                 tags$h3("Descomposición numérica de la variabilidad: tabla resumen del ANOVA (A, B, A×B)"),
+                 tags$h3("Descomposición numérica de la variabilidad: tabla resumen del ANOVA"),
                  tableOutput(ns("tabla_anova")),
                  
                  # 4) Barra apilada SCT
                  tags$br(),
-                 tags$h3("Visualización de la descomposición de la variabilidad total (SCE_A + SCE_B + SCE_A×B + SCR)"),
+                 tags$h3("Visualización de la descomposición de la variabilidad total"),
                  plotOutput(ns("plot_sc")),
                  
                  # 5) Interacción
                  tags$br(),
-                 tags$h3("Interacción (A×B): efectos simples y patrones de interacción"),
+                 tags$h3("Gráfico de Interacción (A×B)"),
                  plotOutput(ns("plot_interaction")),
                  
                  # 6) LSD factores
                  tags$br(),
-                 tags$h3("Comparación de medias marginales (A y B): intervalos LSD"),
+                 tags$h3("Intervalos LSD"),
                  plotOutput(ns("plot_lsd_factors"))
         )
       )
