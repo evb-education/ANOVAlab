@@ -52,7 +52,7 @@ anova_twoway_fit <- function(dat, alpha = 0.05){
   total_row <- tibble::tibble(
     `Fuente` = "Total",
     `SC`     = sum(tidy$sumsq, na.rm = TRUE),  # SCT
-    `gl`     = sum(tidy$df,    na.rm = TRUE),  # N - 1
+    `gl` = as.integer(sum(tidy$df, na.rm = TRUE)), # <-- NUEVO
     `CM`     = NA_real_,
     `F`      = NA_real_,
     `p-valor`= NA_real_
