@@ -105,8 +105,8 @@ plot_oneway_segments_jitter <- function(dat, fit, mode = "Ambos"){
       y = "Respuesta",
       title = paste(
         "Descomposición geométrica:",
-        "Segmentos en rojo → distancias de cada observación a la media del grupo (SCR).",
-        "Segmentos en negro → distancias de la media de cada grupo a la media general (SCE).",
+        "Segmentos rojos: distancias de cada observación a la media de cada variante/nivel (grupo). Usados en al cálculo de la SCR.",
+        "Segmentos negros: distancias de la media de cada variante/nivel (grupo) a la media general. Usados en al cálculo de la SCE.",
         sep = "\n"
       )
     ) +
