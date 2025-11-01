@@ -271,7 +271,7 @@ plot_sc_twoway_stacked_horizontal <- function(df, scale = c("Valor","Porcentaje"
   g <- ggplot(df, aes(x = "Total", y = valor, fill = Componente)) +
     geom_col(width = .6) + coord_flip() +
     theme_minimal() +
-    labs(x = NULL, y = if (scale == "Valor") "Suma de Cuadrados Total (SCT)" else "Porcentaje",
+    labs(x = NULL, y = if (scale == "Valor") "SCT = SCE_A + SCE_B + SCE_A×B + SCR" else "Porcentaje",
          caption = caption) +
     theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
   if (scale == "Porcentaje"){
