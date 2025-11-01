@@ -56,13 +56,14 @@ anova_oneway_fit <- function(dat){
   total_row <- tibble::tibble(
     `Fuente` = "Total",
     `SC`     = sum(tidy$sumsq, na.rm = TRUE),   # SCT
-    `gl`     = sum(tidy$df,    na.rm = TRUE),   # N - 1
+    `gl`     = as.integer(sum(tidy$df, na.rm = TRUE)),   # <<---- CAMBIO
     `CM`     = NA_real_,
     `F`      = NA_real_,
     `p-valor`= NA_real_
   )
   
   anova_table <- dplyr::bind_rows(anova_table, total_row)
+  anova_table$`gl` <- as.integer(anova_table$`gl`) # añadido
   
   list(fit=fit, mse=mse, dfR=dfR, grand=gm, means=means, sc_long=sc_long,
        anova_table=anova_table)
