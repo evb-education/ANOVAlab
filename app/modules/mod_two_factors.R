@@ -24,6 +24,7 @@ mod_two_factors_ui <- function(id){
     sidebarPanel(
       width = 3,
       # Controles con los textos que mostraste en la captura
+      numericInput(ns("seed"), "Semilla", value = 123, step = 1), # <--- NUEVO
       numericInput(ns("I"), "Variantes / niveles Factor 1 (A)", value = 3, min = 2, step = 1),
       numericInput(ns("J"), "Variantes / niveles Factor 1 (B)", value = 3, min = 2, step = 1),
       numericInput(ns("n"), "nº de observaciones por tratamiento (nij).Todos los tratamientos tienen el mismo nº de observaciones.", value = 10, min = 1, step = 1),
@@ -103,7 +104,8 @@ mod_two_factors_server <- function(id){
         effA  = input$effA,
         effB  = input$effB,
         intAB = input$intAB,
-        sigma = input$sigma
+        sigma = input$sigma,
+        seed  = input$seed         # <--- NUEVO
       )
     })
     
