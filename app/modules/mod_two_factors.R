@@ -48,7 +48,7 @@ mod_two_factors_ui <- function(id){
     mainPanel(
       width = 9,
       tabsetPanel(
-        id = ns("tabs"), type = "tabs",  # 👈 forzamos tabs
+        id = ns("tabs"), type = "tabs",
         
         # ---- Pestaña DATOS ----
         tabPanel("Datos",
@@ -57,16 +57,33 @@ mod_two_factors_ui <- function(id){
         
         # ---- Pestaña REPRESENTACIONES ----
         tabPanel("Representaciones",
-                 # 1) Violines
+                 # 1) Violines (ya primero)
+                 tags$h3("Distribución de las observaciones por tratamiento (A×B)"),
                  plotOutput(ns("plot_violins")),
+                 
                  # 2) Segmentos
+                 tags$br(),
+                 tags$h3("Representación geométrica de la descomposición de la variabilidad (A, B, A×B)"),
                  plotOutput(ns("plot_segments")),
+                 
                  # 3) Tabla resumen ANOVA
+                 tags$br(),
+                 tags$h3("Descomposición numérica de la variabilidad: tabla resumen del ANOVA (A, B, A×B)"),
                  tableOutput(ns("tabla_anova")),
+                 
                  # 4) Barra apilada SCT
+                 tags$br(),
+                 tags$h3("Visualización de la descomposición de la variabilidad total (SCE_A + SCE_B + SCE_A×B + SCR)"),
                  plotOutput(ns("plot_sc")),
-                 # (lo que ya te funciona)
+                 
+                 # 5) Interacción
+                 tags$br(),
+                 tags$h3("Interacción (A×B): efectos simples y patrones de interacción"),
                  plotOutput(ns("plot_interaction")),
+                 
+                 # 6) LSD factores
+                 tags$br(),
+                 tags$h3("Comparación de medias marginales (A y B): intervalos LSD"),
                  plotOutput(ns("plot_lsd_factors"))
         )
       )
@@ -111,7 +128,6 @@ mod_two_factors_server <- function(id){
     })
     
     # Representaciones — 2) Segmentos
-    # 2) Segmentos
     output$plot_segments <- renderPlot({
       req(dat(), fit())
       plot_twoway_segments_labeled(dat(), fit(), mode = input$segments_mode)
