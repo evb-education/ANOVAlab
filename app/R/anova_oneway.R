@@ -41,11 +41,28 @@ anova_oneway_fit <- function(dat){
   )
   
   anova_table <- tidy %>%
-    transmute(
-      `Fuente` = recode(term, "grupo"="Entre grupos", "Residuals"="Residual"),
-      `Suma de Cuadrados` = sumsq, `Grados de libertad`=as.integer(df),
-      `Cuadrado medio`=meansq, `F`=statistic, `p-valor`=p.value
+    dplyr::transmute(
+      `Fuente` = dplyr::recode(term,
+                               grupo     = "Entre grupos",
+                               Residuals = "Residual"),
+      `SC`  = sumsq,
+      `gl`  = as.integer(df),
+      `CM`  = meansq,
+      `F`   = statistic,
+      `p-valor` = p.value
     )
+  
+  # Fila Total (SCT y gl total = N-1)
+  total_row <- tibble::tibble(
+    `Fuente` = "Total",
+    `SC`     = sum(tidy$sumsq, na.rm = TRUE),   # SCT
+    `gl`     = sum(tidy$df,    na.rm = TRUE),   # N - 1
+    `CM`     = NA_real_,
+    `F`      = NA_real_,
+    `p-valor`= NA_real_
+  )
+  
+  anova_table <- dplyr::bind_rows(anova_table, total_row)
   
   list(fit=fit, mse=mse, dfR=dfR, grand=gm, means=means, sc_long=sc_long,
        anova_table=anova_table)
