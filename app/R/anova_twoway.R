@@ -36,14 +36,29 @@ anova_twoway_fit <- function(dat, alpha = 0.05){
   
   anova_table <- tidy %>%
     dplyr::transmute(
-      `Fuente`             = dplyr::recode(term, A = "A", B = "B",
-                                           `A:B` = "A×B", Residuals = "Residual"),
-      `Suma de Cuadrados`  = sumsq,
-      `Grados de libertad` = df,
-      `Cuadrado medio`     = meansq,
-      `F`                  = statistic,
-      `p-valor`            = p.value
+      `Fuente` = dplyr::recode(term,
+                               A        = "A",
+                               B        = "B",
+                               `A:B`    = "A×B",
+                               Residuals= "Residual"),
+      `SC`  = sumsq,
+      `gl`  = as.integer(df),
+      `CM`  = meansq,
+      `F`   = statistic,
+      `p-valor` = p.value
     )
+  
+  # Fila Total (SCT y gl total = N-1)
+  total_row <- tibble::tibble(
+    `Fuente` = "Total",
+    `SC`     = sum(tidy$sumsq, na.rm = TRUE),  # SCT
+    `gl`     = sum(tidy$df,    na.rm = TRUE),  # N - 1
+    `CM`     = NA_real_,
+    `F`      = NA_real_,
+    `p-valor`= NA_real_
+  )
+  
+  anova_table <- dplyr::bind_rows(anova_table, total_row)
   
   list(
     fit = fit, mse = mse, dfR = dfR, grand = gm, alpha = alpha,
