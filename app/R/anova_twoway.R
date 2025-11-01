@@ -128,7 +128,6 @@ plot_twoway_segments <- function(dat, fit, mode = c("both","scr","sce","none")){
   # SCE: distancia de la media de cada combinación A×B a la media general (explicada total)
   #     En 2F: SCE = SCA + SCB + SCA×B
   nota <- paste(
-    "Interpretación geométrica:",
     "Segmentos rojos: distancias de cada observación a la media de su combinación de variantes / niveles de A×B. Usados en el cálculo de SCR",
     "Segmentos negros: distancias de las medias de las combinaciones de variantes / niveles A×B a la media general. Usados en el cálculo de SCE.",
     "Donde SCE = SCA + SCB + SCA×B.",
